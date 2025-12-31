@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    // 1. جلب كل الأحداث
+   
     public function index()
     {
-        $events = Event::with('organizer')->get(); // جلب الأحداث مع المنظم
+        $events = Event::with('organizer')->get(); 
         return response()->json($events, 200);
     }
 
-    // 2. إنشاء حدث جديد
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -26,7 +26,7 @@ class EventController extends Controller
             'theme' => 'required|string',
         ]);
 
-        // ملاحظة: هنا نضع id المنظم يدوياً أو من الـ Auth
+       
         $validated['organizer_id'] = 1; 
         $validated['status'] = 'published';
 
@@ -38,13 +38,13 @@ class EventController extends Controller
         ], 201);
     }
 
-    // 3. جلب تفاصيل حدث واحد
+   
     public function show(Event $event)
     {
         return response()->json($event->load('organizer'), 200);
     }
 
-    // 4. تحديث حدث
+   
     public function update(Request $request, Event $event)
     {
         $validated = $request->validate([
@@ -61,7 +61,7 @@ class EventController extends Controller
         ], 200);
     }
 
-    // 5. حذف حدث
+    
     public function destroy(Event $event)
     {
         $event->delete();
