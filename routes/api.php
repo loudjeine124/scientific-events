@@ -1,40 +1,26 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\SubmissionController;
+use App\Http\Controllers\Api\SessionController;
+use App\Http\Controllers\Api\ReviewController;
 
-// API Controllers
-use App\Http\Controllers\EventController;
-
-// Other Controllers
-use App\Http\Controllers\SubmissionController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\ReviewController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 */
 
-// 🟢 Ping Route (test server)
-Route::get('/ping', function () {
-    return response()->json([
-        'message' => 'Server is up and running!',
-        'version' => 'Laravel 12',
-    ]);
-});
 
-// =======================
-// 1️⃣ Events
-// =======================
+
+
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{event}', [EventController::class, 'show']);
 Route::post('/events', [EventController::class, 'store']);
 Route::put('/events/{event}', [EventController::class, 'update']);
 Route::delete('/events/{event}', [EventController::class, 'destroy']);
 
-// =======================
-// 2️⃣ Program / Sessions
-// =======================
+
 Route::get('/events/{event}/program', [SessionController::class, 'getProgram']);
 
 Route::get('/events/{event}/sessions', [SessionController::class, 'index']);
@@ -43,9 +29,7 @@ Route::get('/sessions/{session}', [SessionController::class, 'show']);
 Route::put('/sessions/{session}', [SessionController::class, 'update']);
 Route::delete('/sessions/{session}', [SessionController::class, 'destroy']);
 
-// =======================
-// 3️⃣ Submissions
-// =======================
+
 Route::get('/events/{event}/submissions', [SubmissionController::class, 'index']);
 Route::post('/events/{event}/submissions', [SubmissionController::class, 'store']);
 
@@ -58,14 +42,18 @@ Route::post(
     [SubmissionController::class, 'assignToSession']
 );
 
-// =======================
-// 4️⃣ Reviews
-// =======================
+
 Route::get('/submissions/{submission}/reviews', [ReviewController::class, 'index']);
 Route::post('/submissions/{submission}/reviews', [ReviewController::class, 'store']);
 
 Route::get('/reviews/{review}', [ReviewController::class, 'show']);
 Route::put('/reviews/{review}', [ReviewController::class, 'update']);
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
-
+Route::get('/test-encoding', function () {
+    return response()->json([
+        'test_french' => 'Journée scientifique en Santé 2025',
+        'test_arabic' => 'يوم علمي في الصحة 2025',
+        'test_encoding' => mb_detect_encoding('Journée')
+    ]);
+});
 ?>
